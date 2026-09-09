@@ -1,20 +1,57 @@
+/* 7UP footer — dark bar, centered legal links row + copyright line */
+
 footer {
-  background-color: var(--light-color);
+  background-color: var(--brand-dark);
+  color: #fff;
   font-size: var(--body-font-size-xs);
 }
 
 footer .footer > div {
   margin: auto;
   max-width: 1200px;
-  padding: 40px 24px 24px;
+  padding: 24px;
+  text-align: center;
 }
 
-footer .footer p {
+/* legal / utility links */
+footer .footer-links ul {
+  list-style: none;
   margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+footer .footer-links a:any-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+footer .footer-links a:hover {
+  color: var(--brand-green);
+  text-decoration: underline;
+}
+
+/* copyright / trademark line */
+footer .footer-legal {
+  padding-top: 8px;
+}
+
+footer .footer-legal p {
+  margin: 0;
+  color: rgb(255 255 255 / 70%);
 }
 
 @media (width >= 900px) {
   footer .footer > div {
-    padding: 40px 32px 24px;
+    padding: 28px 32px;
+  }
+
+  footer .footer-links ul {
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 8px 28px;
   }
 }
