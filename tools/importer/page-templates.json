@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "projectType": "da"
+  },
+  "templates": [
+    {
+      "name": "home",
+      "urls": [
+        "https://www.7up.com/en"
+      ],
+      "representativeUrl": "https://www.7up.com/en",
+      "description": "7up homepage: full-bleed promotional banners (lime hero, store locator, flip-the-sip).",
+      "urlPattern": "/*",
+      "blocks": [
+        {
+          "name": "hero-banner",
+          "instances": [
+            "#simple-7up-banner-new > div.banner-wrapper1",
+            "#simple-7up-banner-new > div.banner-wrapper3"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "rc4",
+          "name": "promotional-banners",
+          "selector": [
+            "#simple-7up-banner-new"
+          ],
+          "style": null,
+          "blocks": [
+            "hero-banner"
+          ],
+          "defaultContent": []
+        }
+      ]
+    }
+  ]
+}

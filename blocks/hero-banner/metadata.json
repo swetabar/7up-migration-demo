@@ -1,0 +1,16 @@
+{
+  "variantName": "hero-banner",
+  "baseBlock": "hero",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "Full-bleed promotional banner with a background photo/image, a large heading, optional supporting paragraph, and a single CTA button. Content is either left-aligned directly over the background (default) or centered inside a rounded card panel (card option).",
+  "contentPattern": "Row 1: background image. Following rows: heading, optional paragraph text, and a CTA link.",
+  "usage": "Used for full-width hero and promotional banners. On the 7up homepage it appears 3 times (lime hero, store-locator card, flip-the-sip card).",
+  "options": [
+    {
+      "name": "card",
+      "class": "card",
+      "description": "Boxes the heading/text/CTA into a centered rounded panel over the background image."
+    }
+  ],
+  "memberVariantIds": ["hero-banner"]
+}

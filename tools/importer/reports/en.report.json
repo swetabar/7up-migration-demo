@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en",
+  "path": "en",
+  "timestamp": "2026-09-09T18:24:43.556Z",
+  "title": "7UP | 7up.com",
+  "template": "home",
+  "blocks": [
+    "hero-banner",
+    "hero-banner",
+    "hero-banner"
+  ]
+}

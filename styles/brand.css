@@ -1,0 +1,28 @@
+:root {
+  /* Fonts — from source Typekit kit fgu3qqr (bourbon = display/heading, nobel = body) */
+  --heading-font-family: "bourbon", bourbon-fallback, "Arial Narrow", sans-serif;
+  --body-font-family: "nobel", nobel-fallback, arial, helvetica, sans-serif;
+
+  /* Brand colors — 7UP green + neutrals */
+  --background-color: #fff;
+  --text-color: #131313;
+  --link-color: #00a74f;
+  --link-hover-color: #01ab14;
+
+  /* Brand palette */
+  --brand-green: #00a74f;
+  --brand-green-card: #01ab14;
+  --brand-dark: #131313;
+
+  /* Spacing */
+  --section-padding: 40px;
+  --nav-height: 59px;
+
+  /* Heading sizes (desktop) */
+  --heading-size-xxl: 64px;
+  --heading-size-xl: 40px;
+  --heading-size-l: 30px;
+  --heading-size-m: 24px;
+  --heading-size-s: 20px;
+  --heading-size-xs: 18px;
+}
