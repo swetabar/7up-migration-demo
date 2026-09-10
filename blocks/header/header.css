@@ -42,8 +42,9 @@ header nav .nav-brand p {
 }
 
 header nav .nav-brand img {
-  width: 56px;
-  height: auto;
+  width: auto;
+  height: 40px;
+  max-height: calc(var(--nav-height) - 16px);
   display: block;
 }
 
@@ -184,7 +185,7 @@ header nav[aria-expanded='true'] .nav-hamburger-icon::after {
   }
 
   header nav .nav-brand img {
-    width: 64px;
+    height: 44px;
   }
 
   /* links + social sit together on the right */

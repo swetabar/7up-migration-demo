@@ -10,7 +10,6 @@
       ],
       "representativeUrl": "https://www.7up.com/en",
       "description": "7up homepage: full-bleed promotional banners (lime hero, store locator, flip-the-sip).",
-      "urlPattern": "/*",
       "blocks": [
         {
           "name": "hero-banner",
@@ -32,6 +31,40 @@
             "hero-banner"
           ],
           "defaultContent": []
+        }
+      ],
+      "urlPattern": "/*"
+    },
+    {
+      "name": "recipes",
+      "urls": [
+        "https://www.7up.com/en/recipes"
+      ],
+      "representativeUrl": "https://www.7up.com/en/recipes",
+      "description": "7up recipes listing: intro tagline + a grid of recipe cards.",
+      "urlPattern": "/en/*",
+      "blocks": [
+        {
+          "name": "cards-recipe",
+          "instances": [
+            "#body section.recipes .recipe-grid"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "rc3",
+          "name": "recipes-body",
+          "selector": [
+            "#body"
+          ],
+          "style": "green",
+          "blocks": [
+            "cards-recipe"
+          ],
+          "defaultContent": [
+            "#body > div.filters .filter p"
+          ]
         }
       ]
     }

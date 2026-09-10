@@ -1,0 +1,11 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes",
+  "path": "en/recipes",
+  "timestamp": "2026-09-09T19:01:05.695Z",
+  "title": "7UP® Recipes | 7up.com",
+  "template": "recipes",
+  "blocks": [
+    "cards-recipe"
+  ]
+}

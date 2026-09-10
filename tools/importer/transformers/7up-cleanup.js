@@ -27,6 +27,15 @@ export default function transform(hookName, element, payload) {
       // in the source HTML but hidden / JS-gated on the live homepage, so it never
       // renders for real visitors. Removed to match what's actually visible.
       '#products',
+      // Recipes page: non-authorable interactive/decorative chrome inside #body —
+      //   .filters .overlay (dim layer), .shaker (JS randomizer image link),
+      //   .no-results (hidden "no recipe" JS state), #snow-container (decorative).
+      // The intro tagline (.filters .filter p) and .recipe-grid are preserved.
+      '.filters .overlay',
+      '.shaker',
+      '.pop-up-container',
+      '.no-results',
+      '#snow-container',
     ]);
   }
 

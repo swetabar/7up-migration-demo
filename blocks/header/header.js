@@ -37,6 +37,15 @@ export default async function decorate(block) {
   nav.id = 'nav';
   nav.setAttribute('aria-expanded', 'false');
 
+  // Normalize relative nav image paths (e.g. "images/logo.png") to root-absolute
+  // so they resolve on nested pages (e.g. /content/en/recipes), not relative to the URL.
+  fragment.querySelectorAll('img[src]').forEach((img) => {
+    const src = img.getAttribute('src');
+    if (src && !/^(https?:)?\/\//.test(src) && !src.startsWith('/')) {
+      img.setAttribute('src', `/${src.replace(/^\.?\/*/, '')}`);
+    }
+  });
+
   // Assign semantic section classes in order: brand, sections, tools
   const classes = ['brand', 'sections', 'tools'];
   [...fragment.children].forEach((section, i) => {
