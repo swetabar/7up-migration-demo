@@ -1,0 +1,10 @@
+{
+  "variantName": "cards-nutrition",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "Responsive grid/list of product detail panels. Each card shows a product image, title, description, a nutrition-facts table, and an ingredients paragraph.",
+  "contentPattern": "One row per product. First cell holds the product image; the body cell holds the title, description, a nutrition-facts table, and ingredients as default content.",
+  "usage": "Per-flavour product detail panels on the 7up products page (and homepage explorer). Six flavours.",
+  "options": [],
+  "memberVariantIds": ["cards-nutrition"]
+}

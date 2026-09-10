@@ -1,0 +1,17 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/products",
+  "path": "en/products",
+  "timestamp": "2026-09-10T18:31:45.028Z",
+  "title": "7UP | 7up.com",
+  "template": "products",
+  "blocks": [
+    "carousel-product",
+    "cards-nutrition",
+    "cards-nutrition",
+    "cards-nutrition",
+    "cards-nutrition",
+    "cards-nutrition",
+    "cards-nutrition"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "variantName": "carousel-product",
+  "baseBlock": "carousel",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "Horizontal, swipable product-can selector showing several cans at once, with circular prev/next navigation arrows overlaid on the sides. Slides snap-scroll horizontally.",
+  "contentPattern": "One row per product slide. Each slide's first cell holds the product-can image (linked to its detail); an optional second cell holds label/content.",
+  "usage": "Product-can selector on the 7up products page (and the homepage product explorer). Six flavour cans.",
+  "options": [],
+  "memberVariantIds": ["carousel-product"]
+}
