@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/7up-holiday-party-punch",
+  "path": "en/recipes/7up-holiday-party-punch",
+  "timestamp": "2026-09-10T15:11:53.226Z",
+  "title": "7UP® Holiday Party Punch Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/tequila-smash",
+  "path": "en/recipes/tequila-smash",
+  "timestamp": "2026-09-10T15:14:52.640Z",
+  "title": "Tequila Smash Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

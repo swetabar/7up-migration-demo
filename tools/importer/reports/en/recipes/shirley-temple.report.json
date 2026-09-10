@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/shirley-temple",
+  "path": "en/recipes/shirley-temple",
+  "timestamp": "2026-09-10T14:31:44.194Z",
+  "title": "Shirley Temple Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

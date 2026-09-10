@@ -25,7 +25,24 @@ export default function parse(element, { document }) {
   const ingredientsCol = columnDivs[0];
   const directionsCol = columnDivs[1] || document.createElement('div');
 
-  // Reference the whole column elements so headings, lists, icons, and <sup> markup
+  // A columns block cell becomes one grid-table cell in the imported markdown.
+  // A single leading heading (the column's "Ingredients"/"Directions" title) is fine,
+  // but a SECOND block-level heading later in the same cell — e.g. the "21+. Please
+  // Drink Responsibly." <h6> alcoholic recipes place after the Directions list — makes
+  // md2da fall back to emitting the whole page as raw grid-table text. Keep the first
+  // heading in each column as its title and downgrade any later headings to <p> so the
+  // text is preserved while the grid table stays valid.
+  [ingredientsCol, directionsCol].forEach((col) => {
+    const headings = col.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    headings.forEach((h, i) => {
+      if (i === 0) return; // keep the column title as a heading
+      const p = document.createElement('p');
+      p.innerHTML = h.innerHTML;
+      h.replaceWith(p);
+    });
+  });
+
+  // Reference the whole column elements so lists, icons, and <sup> markup
   // are preserved intact within each cell.
   const cells = [];
   cells.push([ingredientsCol, directionsCol]);

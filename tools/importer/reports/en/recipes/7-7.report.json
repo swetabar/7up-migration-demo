@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/7-7",
+  "path": "en/recipes/7-7",
+  "timestamp": "2026-09-10T16:24:20.824Z",
+  "title": "7 & 7 Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

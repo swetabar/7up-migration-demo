@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/classic-7up-margarita",
+  "path": "en/recipes/classic-7up-margarita",
+  "timestamp": "2026-09-10T14:59:40.280Z",
+  "title": "Classic 7UP Margarita Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/tropical-snakebite",
+  "path": "en/recipes/tropical-snakebite",
+  "timestamp": "2026-09-10T15:03:44.286Z",
+  "title": "Tropical Snakebite Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

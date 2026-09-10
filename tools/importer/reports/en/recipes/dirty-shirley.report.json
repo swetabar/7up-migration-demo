@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/dirty-shirley",
+  "path": "en/recipes/dirty-shirley",
+  "timestamp": "2026-09-10T14:23:01.692Z",
+  "title": "7UP® Dirty Shirley | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/lemon-lime-float",
+  "path": "en/recipes/lemon-lime-float",
+  "timestamp": "2026-09-10T13:51:20.513Z",
+  "title": "7UP® Lemon Lime Float | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

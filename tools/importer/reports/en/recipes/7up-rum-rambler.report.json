@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/7up-rum-rambler",
+  "path": "en/recipes/7up-rum-rambler",
+  "timestamp": "2026-09-10T14:51:26.034Z",
+  "title": "7UP® Rum Rambler Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

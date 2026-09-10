@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/pineapple-sheet-cake",
+  "path": "en/recipes/pineapple-sheet-cake",
+  "timestamp": "2026-09-10T15:09:20.595Z",
+  "title": "Pineapple Sheet Cake Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

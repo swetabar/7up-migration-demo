@@ -1,0 +1,8 @@
+{
+  "status": "failed",
+  "url": "https://www.7up.com/en/recipes/shirley-temple-bundt-cake",
+  "path": "en/recipes/shirley-temple-bundt-cake",
+  "timestamp": "2026-09-10T14:17:38.838Z",
+  "error": "BLOCKED_PAGE: CLOUDFLARE — \"attention required! | cloudflare\"",
+  "errorStack": "Error: BLOCKED_PAGE: CLOUDFLARE — \"attention required! | cloudflare\"\n    at processUrl (file:///home/node/.excat-marketplaces/excat-marketplace/excat/skills/excat-content-import/scripts/run-bulk-import.js:629:15)\n    at async main (file:///home/node/.excat-marketplaces/excat-marketplace/excat/skills/excat-content-import/scripts/run-bulk-import.js:1012:33)"
+}

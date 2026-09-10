@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/7up-sunrise",
+  "path": "en/recipes/7up-sunrise",
+  "timestamp": "2026-09-10T15:19:03.760Z",
+  "title": "7UP® Sunrise Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

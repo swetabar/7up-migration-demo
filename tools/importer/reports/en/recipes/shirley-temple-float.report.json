@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/shirley-temple-float",
+  "path": "en/recipes/shirley-temple-float",
+  "timestamp": "2026-09-10T14:25:38.990Z",
+  "title": "7UP® Shirley Temple float | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

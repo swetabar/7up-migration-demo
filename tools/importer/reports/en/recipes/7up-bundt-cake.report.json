@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/7up-bundt-cake",
+  "path": "en/recipes/7up-bundt-cake",
+  "timestamp": "2026-09-10T15:27:51.276Z",
+  "title": "7UP® Bundt Cake Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

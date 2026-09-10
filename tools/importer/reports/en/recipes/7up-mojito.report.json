@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/7up-mojito",
+  "path": "en/recipes/7up-mojito",
+  "timestamp": "2026-09-10T15:23:41.469Z",
+  "title": "7UP® Mojito Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

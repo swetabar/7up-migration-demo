@@ -49,6 +49,11 @@ export default function transform(hookName, element, payload) {
       // and carries the wrong recipe name; it is hidden on the live page. Remove it
       // so it doesn't render as broken literal <sup> text.
       '.recipe-content-container > span',
+      // Recipe-detail: "Try these other recipes" related-recipes carousel that
+      // trails the recipe body — cross-page navigation chrome (linked recipe
+      // cards), not part of this recipe's content. Removing it also keeps its
+      // raw <a> cards from leaking into the imported markdown.
+      '.related-recipes',
     ]);
   }
 

@@ -63,6 +63,15 @@ var CustomImportScript = (() => {
     }
     const ingredientsCol = columnDivs[0];
     const directionsCol = columnDivs[1] || document2.createElement("div");
+    [ingredientsCol, directionsCol].forEach((col) => {
+      const headings = col.querySelectorAll("h1, h2, h3, h4, h5, h6");
+      headings.forEach((h, i) => {
+        if (i === 0) return;
+        const p = document2.createElement("p");
+        p.innerHTML = h.innerHTML;
+        h.replaceWith(p);
+      });
+    });
     const cells = [];
     cells.push([ingredientsCol, directionsCol]);
     const block = WebImporter.Blocks.createBlock(document2, { name: "columns-recipe", cells });
@@ -106,7 +115,12 @@ var CustomImportScript = (() => {
         // content container) — its markup is double-encoded ("7UP&lt;sup&gt;®&lt;/sup&gt;")
         // and carries the wrong recipe name; it is hidden on the live page. Remove it
         // so it doesn't render as broken literal <sup> text.
-        ".recipe-content-container > span"
+        ".recipe-content-container > span",
+        // Recipe-detail: "Try these other recipes" related-recipes carousel that
+        // trails the recipe body — cross-page navigation chrome (linked recipe
+        // cards), not part of this recipe's content. Removing it also keeps its
+        // raw <a> cards from leaking into the imported markdown.
+        ".related-recipes"
       ]);
     }
     if (hookName === TransformHook.afterTransform) {

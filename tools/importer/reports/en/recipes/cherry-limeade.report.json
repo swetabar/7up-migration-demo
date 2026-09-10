@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/cherry-limeade",
+  "path": "en/recipes/cherry-limeade",
+  "timestamp": "2026-09-10T15:25:24.783Z",
+  "title": "Cherry Limeade Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

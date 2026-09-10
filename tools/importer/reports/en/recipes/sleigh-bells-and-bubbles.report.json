@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/sleigh-bells-and-bubbles",
+  "path": "en/recipes/sleigh-bells-and-bubbles",
+  "timestamp": "2026-09-10T15:06:33.273Z",
+  "title": "Sleigh Bells and Bubbles Recipe | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}
