@@ -29,9 +29,12 @@ export default function parse(element, { document }) {
   const cells = [];
 
   items.forEach((item) => {
-    // Recipe href -> /recipes/{slug}
-    const href = item.getAttribute('href') || '';
-    const slug = href.split('/').filter(Boolean).pop() || '';
+    // Source recipe href is /recipes/{slug}, but the migrated detail pages live
+    // under the locale path /en/recipes/{slug}. Rewrite the link so each card
+    // points at the migrated page instead of a 404.
+    const rawHref = item.getAttribute('href') || '';
+    const slug = rawHref.split('/').filter(Boolean).pop() || '';
+    const href = slug ? `/en/recipes/${slug}` : rawHref;
 
     // --- Cell 1: image ---
     // Source uses a CSS background-image / lazy-load, so there is no inline <img>.
