@@ -36,6 +36,19 @@ export default function transform(hookName, element, payload) {
       '.pop-up-container',
       '.no-results',
       '#snow-container',
+      // Recipe-detail page: non-authorable chrome —
+      //   .next-prev-container (PREV/NEXT recipe pagination), .modal.age-gate
+      //   (age-gate overlay), .share-container (social share icons), .print-logo
+      //   (print-only logo img). Recipe hero/title/intro/columns/tips are preserved.
+      '.next-prev-container',
+      '.modal.age-gate',
+      '.share-container',
+      '.print-logo',
+      // Recipe-detail: stray mis-encoded meta subtitle span (direct child of the
+      // content container) — its markup is double-encoded ("7UP&lt;sup&gt;®&lt;/sup&gt;")
+      // and carries the wrong recipe name; it is hidden on the live page. Remove it
+      // so it doesn't render as broken literal <sup> text.
+      '.recipe-content-container > span',
     ]);
   }
 

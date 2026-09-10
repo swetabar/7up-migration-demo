@@ -1,0 +1,25 @@
+.hero-recipe-container .hero-recipe-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.hero-recipe {
+  position: relative;
+  padding: 0;
+  line-height: 0;
+}
+
+/* Full-bleed feature photo, edge to edge */
+.hero-recipe picture,
+.hero-recipe img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* No-image fallback: keep a sensible band height */
+.hero-recipe.no-image {
+  min-height: 200px;
+  background-color: var(--light-color);
+}

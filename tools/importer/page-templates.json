@@ -9,7 +9,7 @@
         "https://www.7up.com/en"
       ],
       "representativeUrl": "https://www.7up.com/en",
-      "description": "7up homepage: full-bleed promotional banners (lime hero, store locator, flip-the-sip).",
+      "description": "To be named in naming step",
       "blocks": [
         {
           "name": "hero-banner",
@@ -41,8 +41,7 @@
         "https://www.7up.com/en/recipes"
       ],
       "representativeUrl": "https://www.7up.com/en/recipes",
-      "description": "7up recipes listing: intro tagline + a grid of recipe cards.",
-      "urlPattern": "/en/*",
+      "description": "To be named in naming step",
       "blocks": [
         {
           "name": "cards-recipe",
@@ -64,6 +63,82 @@
           ],
           "defaultContent": [
             "#body > div.filters .filter p"
+          ]
+        }
+      ],
+      "urlPattern": "/en/*"
+    },
+    {
+      "name": "recipe-detail",
+      "urls": [
+        "https://www.7up.com/en/recipes/rainbow-sherbet-float"
+      ],
+      "representativeUrl": "https://www.7up.com/en/recipes/rainbow-sherbet-float",
+      "description": "Individual recipe detail page: hero image, title + intro, ingredients/directions columns, tips band.",
+      "urlPattern": "/en/recipes/*",
+      "blocks": [
+        {
+          "name": "hero-recipe",
+          "instances": [
+            "#body section.recipe-detail .featured-recipe-image"
+          ]
+        },
+        {
+          "name": "columns-recipe",
+          "instances": [
+            "#body section.recipe-detail .recipe-content"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "rc3c1c1",
+          "name": "recipe-hero",
+          "selector": [
+            "#body section.recipe-detail .featured-recipe-image"
+          ],
+          "style": null,
+          "blocks": [
+            "hero-recipe"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc3c1c2-intro",
+          "name": "recipe-intro",
+          "selector": [
+            "#body section.recipe-detail .recipe-content-container"
+          ],
+          "style": "centered",
+          "blocks": [],
+          "defaultContent": [
+            "#body section.recipe-detail .recipe-content-container > h1",
+            "#body section.recipe-detail .recipe-intro p"
+          ]
+        },
+        {
+          "id": "rc3c1c2c1",
+          "name": "recipe-body",
+          "selector": [
+            "#body section.recipe-detail .recipe-content"
+          ],
+          "style": null,
+          "blocks": [
+            "columns-recipe"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc3c1c2c2",
+          "name": "recipe-tips",
+          "selector": [
+            "#body section.recipe-detail .recipe-tips"
+          ],
+          "style": "green",
+          "blocks": [],
+          "defaultContent": [
+            "#body section.recipe-detail .recipe-tips h1",
+            "#body section.recipe-detail .recipe-tips p"
           ]
         }
       ]

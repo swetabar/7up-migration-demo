@@ -1,0 +1,128 @@
+.columns-recipe > div {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Images in this variant are small inline icons (ready-in, serving, glass note),
+   never full-width column images — keep them icon-sized and inline. */
+.columns-recipe img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* Ingredients / Directions panels — centered content to match source */
+.columns-recipe > div > div {
+  order: 1;
+  text-align: center;
+}
+
+.columns-recipe > div > .columns-recipe-img-col {
+  order: 0;
+}
+
+.columns-recipe > div > .columns-recipe-img-col img {
+  display: block;
+}
+
+.columns-recipe h2,
+.columns-recipe h3 {
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Lists and the note paragraph in a column share one centered, equal-width box
+   so their items line up on a common left edge (ingredient bullets, the
+   ready-in/serving metadata, the direction steps, and the glass note). */
+.columns-recipe ul,
+.columns-recipe ol,
+.columns-recipe > div > div > p {
+  list-style: none;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  padding: 0;
+  text-align: left;
+}
+
+.columns-recipe ul,
+.columns-recipe ol {
+  display: block;
+}
+
+.columns-recipe li {
+  margin-bottom: 10px;
+}
+
+/* Metadata rows (ready-in / serving) that carry an inline icon, and the glass
+   note <p>: lay the icon out beside the text with flex. Plain text items
+   (ingredients, directions) stay normal flow so inline <sup> etc. don't break. */
+.columns-recipe li:has(img),
+.columns-recipe > div > div > p {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Numbered step badges for the Directions column (second column's step list).
+   The step list is the first <ul> in the last column; the glass note is a <p>. */
+.columns-recipe > div > div:last-child > ul {
+  counter-reset: step;
+}
+
+.columns-recipe > div > div:last-child > ul > li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 34px;
+}
+
+.columns-recipe > div > div:last-child > ul > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--brand-green);
+  color: #fff;
+  font-weight: 700;
+  font-size: var(--body-font-size-xs);
+  line-height: 1;
+}
+
+/* Green bullet on the ingredient list (first list in the first column) */
+.columns-recipe > div > div:first-child > ul:first-of-type > li {
+  position: relative;
+  padding-left: 16px;
+}
+
+.columns-recipe > div > div:first-child > ul:first-of-type > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--brand-green);
+}
+
+@media (width >= 900px) {
+  .columns-recipe > div {
+    align-items: flex-start;
+    flex-direction: unset;
+    gap: 48px;
+  }
+
+  .columns-recipe > div > div {
+    flex: 1;
+    order: unset;
+  }
+}

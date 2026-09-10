@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/recipes/rainbow-sherbet-float",
+  "path": "en/recipes/rainbow-sherbet-float",
+  "timestamp": "2026-09-10T13:14:38.331Z",
+  "title": "7UP® Rainbow Sherbet Float | 7UP®",
+  "template": "recipe-detail",
+  "blocks": [
+    "hero-recipe",
+    "columns-recipe"
+  ]
+}

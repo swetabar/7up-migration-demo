@@ -348,3 +348,29 @@ main .section.green .default-content-wrapper p {
   text-transform: uppercase;
   line-height: 1.1;
 }
+
+/* Centered section (e.g. recipe-detail title + intro) */
+main .section.centered .default-content-wrapper {
+  text-align: center;
+}
+
+/* Recipe-detail title: centered green heading with a short divider beneath */
+main .section.centered .default-content-wrapper h1 {
+  color: var(--brand-green);
+  text-transform: uppercase;
+}
+
+main .section.centered .default-content-wrapper h1::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 3px;
+  margin: 16px auto 0;
+  background-color: var(--brand-green);
+}
+
+main .section.centered .default-content-wrapper p {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}

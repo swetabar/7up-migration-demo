@@ -1,0 +1,10 @@
+{
+  "variantName": "hero-recipe",
+  "baseBlock": "hero",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "Full-bleed, edge-to-edge recipe feature photograph at the top of a recipe detail page. Image only — no heading or CTA overlaid (the title/intro render as default content below).",
+  "contentPattern": "Single row, single cell containing the recipe feature image.",
+  "usage": "Top-of-page hero image on recipe detail pages (e.g. Rainbow Sherbet Float).",
+  "options": [],
+  "memberVariantIds": ["hero-recipe"]
+}

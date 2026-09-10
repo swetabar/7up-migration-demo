@@ -1,0 +1,10 @@
+{
+  "variantName": "columns-recipe",
+  "baseBlock": "columns",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "Two side-by-side informational columns on a recipe detail page. Left: Ingredients (heading + bulleted list + ready-in/serving metadata rows). Right: Directions (heading + numbered steps + a serving note). Stacks vertically on mobile.",
+  "contentPattern": "One row, two columns. Column 1 = Ingredients (heading, list, metadata). Column 2 = Directions (heading, numbered steps, note). Icons render as inline images.",
+  "usage": "Recipe body on recipe detail pages (ingredients vs directions).",
+  "options": [],
+  "memberVariantIds": ["columns-recipe"]
+}
