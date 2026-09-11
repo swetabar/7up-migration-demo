@@ -1,7 +1,7 @@
 /* 7UP header / nav — bright green bar, white logo, dark bold links, social icons */
 
 header .nav-wrapper {
-  background-color: var(--brand-green);
+  background-color: #01ab14;
   width: 100%;
   z-index: 2;
   position: fixed;
@@ -20,7 +20,6 @@ header nav {
   align-items: center;
   gap: 0 16px;
   margin: auto;
-  max-width: 1264px;
   min-height: var(--nav-height);
   padding: 0 20px;
   font-family: var(--body-font-family);
