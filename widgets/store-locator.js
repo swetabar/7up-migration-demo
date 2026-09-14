@@ -2,47 +2,59 @@
  * store-locator widget — mounts the Destini Product Locators embed.
  *
  * The widget block (blocks/widget/widget.js) fetches this file's HTML/CSS/JS and
- * calls this default export with the block element. It has already copied the
- * authored link's query params onto `block.dataset` (data-locator-id, etc.).
+ * calls this default export with the block element.
  *
- * Destini hydrates an empty mount div (#destini-locator) that carries its config
- * as attributes; its loader snippet then injects the search UI client-side. The
- * snippet targets the mount by id via its `?id=` query param.
+ * Destini's ProductFirst snippet reads its config from the attributes on its OWN
+ * <script> installation tag (the `?id=` param only names the target div); without
+ * a `locator-id` there it errors with "missing locator-id from the installation
+ * script". The config is FIXED for the 7UP OCL locator, so we bake it in as
+ * defaults here rather than routing it through the authored content link — EDS
+ * normalizes authored links and drops query strings, so config passed via the
+ * link href does not survive the content pipeline. Authored data-* attributes
+ * (if ever present) still override the defaults.
  */
 const MOUNT_ID = 'destini-locator';
 const DESTINI_LOADER = `https://lets.shop/productFirstSnippet.js?id=${MOUNT_ID}`;
 
+// Fixed Destini config for the 7UP OCL Store Locator.
+const DEFAULT_CONFIG = {
+  'locator-id': '3170',
+  'alpha-code': 'C62',
+  'locator-name': '7UP OCL Store Locator',
+  'client-id': 'up',
+};
+
+// Map hyphenated Destini attrs to their camelCase dataset aliases (for overrides).
+const DATASET_KEYS = {
+  'locator-id': 'locatorId',
+  'alpha-code': 'alphaCode',
+  'locator-name': 'locatorName',
+  'client-id': 'clientId',
+};
+
 /**
- * @param {Element} block the widget block element (config on block.dataset)
+ * @param {Element} block the widget block element (optional config on block.dataset)
  */
 export default function decorate(block) {
   const mount = block.querySelector(`#${MOUNT_ID}`);
   if (!mount) return;
 
-  // The Destini ProductFirst snippet reads its config from the attributes on its
-  // OWN <script> installation tag (the `?id=` param only names the target div).
-  // Mirror the config onto the mount div too — Destini hydrates it — but the
-  // authoritative source for the snippet is the script tag, so config MUST live
-  // there or Destini errors with "missing locator-id from the installation script".
-  const attrMap = {
-    locatorId: 'locator-id',
-    alphaCode: 'alpha-code',
-    locatorName: 'locator-name',
-    clientId: 'client-id',
-  };
+  // Resolve config: baked-in defaults, optionally overridden by authored data-*.
+  const config = {};
+  Object.entries(DEFAULT_CONFIG).forEach(([attr, fallback]) => {
+    const override = block.dataset[DATASET_KEYS[attr]];
+    config[attr] = override || fallback;
+  });
 
   // Load the Destini loader snippet once per page, carrying the config as
-  // attributes on the script tag itself.
+  // attributes on the script tag (authoritative) and mirrored onto the mount div.
   if (!document.querySelector('script[src*="lets.shop/productFirstSnippet.js"]')) {
     const script = document.createElement('script');
     script.src = DESTINI_LOADER;
     script.async = true;
-    Object.entries(attrMap).forEach(([dataKey, attr]) => {
-      const value = block.dataset[dataKey];
-      if (value) {
-        script.setAttribute(attr, value);
-        mount.setAttribute(attr, value);
-      }
+    Object.entries(config).forEach(([attr, value]) => {
+      script.setAttribute(attr, value);
+      mount.setAttribute(attr, value);
     });
     document.body.append(script);
   }

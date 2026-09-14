@@ -43,15 +43,8 @@ var CustomImportScript = (() => {
 
   // tools/importer/parsers/widget.js
   function parse(element, { document: document2 }) {
-    const params = new URLSearchParams({
-      "locator-id": "3170",
-      "alpha-code": "C62",
-      "locator-name": "7UP OCL Store Locator",
-      "client-id": "up"
-    });
-    const href = `/widgets/store-locator.html?${params.toString()}`;
     const link = document2.createElement("a");
-    link.setAttribute("href", href);
+    link.setAttribute("href", "/widgets/store-locator");
     link.textContent = "store-locator";
     const cells = [[link]];
     const block = WebImporter.Blocks.createBlock(document2, { name: "widget", cells });

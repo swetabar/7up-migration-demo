@@ -18,17 +18,13 @@
  * query params onto data-* attributes so the widget can read its config.
  */
 export default function parse(element, { document }) {
-  // Destini config for this locator instance (from page analysis).
-  const params = new URLSearchParams({
-    'locator-id': '3170',
-    'alpha-code': 'C62',
-    'locator-name': '7UP OCL Store Locator',
-    'client-id': 'up',
-  });
-  const href = `/widgets/store-locator.html?${params.toString()}`;
-
+  // Author the widget as a bare link to the store-locator asset. The Destini
+  // config (locator-id=3170, alpha-code=C62, locator-name="7UP OCL Store Locator",
+  // client-id=up) is baked into widgets/store-locator.js — NOT passed as query
+  // params here, because EDS normalizes authored links and drops query strings in
+  // the content pipeline, so config on the href would not survive to the widget.
   const link = document.createElement('a');
-  link.setAttribute('href', href);
+  link.setAttribute('href', '/widgets/store-locator');
   link.textContent = 'store-locator';
 
   const cells = [[link]];
