@@ -76,7 +76,26 @@ var CustomImportScript = (() => {
         cta.textContent = "Nutrition Facts";
         ctaCell.append(cta);
       }
-      cells.push([img || document.createElement("span"), nameCell, descCell, ctaCell]);
+      const nutriCell = document.createElement("div");
+      const nutrition = panel ? panel.querySelector(".nutrition-container, .nutrition") : null;
+      if (nutrition) {
+        const clone = nutrition.cloneNode(true);
+        clone.querySelectorAll("button, .btn-products, .customer-reviews, .smart-commerce, .reviews-btn").forEach((n) => n.remove());
+        clone.querySelectorAll("table").forEach((table) => {
+          const ul = document.createElement("ul");
+          table.querySelectorAll("tr").forEach((tr) => {
+            const parts = [...tr.children].map((c) => c.textContent.replace(/\s+/g, " ").trim());
+            const text = parts.filter(Boolean).join(" \u2014 ");
+            if (!text) return;
+            const liEl = document.createElement("li");
+            liEl.textContent = text;
+            ul.append(liEl);
+          });
+          table.replaceWith(ul);
+        });
+        while (clone.firstChild) nutriCell.append(clone.firstChild);
+      }
+      cells.push([img || document.createElement("span"), nameCell, descCell, ctaCell, nutriCell]);
     });
     const block = WebImporter.Blocks.createBlock(document, { name: "hero-tabs", cells });
     block.setAttribute("data-hero-tabs", "true");

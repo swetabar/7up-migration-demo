@@ -3,12 +3,16 @@
  * the 7up.com #products interaction.
  *
  * Authoring model — one row per flavour, cells in this order:
- *   | can image | Flavour Name | description text | CTA link |
+ *   | can image | Flavour Name | description text | CTA link | nutrition facts |
  * The first row's flavour is the one shown selected on load.
  *
  * Behaviour (matches source `home.selectProduct`): clicking a can (or a nav
  * arrow) makes it the centre can and relabels every can item-1..item-N around
  * the arc, while the matching content panel gets `.active` and slides in.
+ * Clicking the "Nutrition Facts" button hides itself and reveals that flavour's
+ * nutrition detail (Calories, Serving Size, facts, Ingredients, legal) with a
+ * "Description" button at the bottom that toggles back — mirroring the source's
+ * paired btn-products buttons (hide self, fade in sibling).
  */
 export default function decorate(block) {
   const rows = [...block.children];
@@ -20,8 +24,9 @@ export default function decorate(block) {
     const name = cells[1] ? cells[1].textContent.trim() : '';
     const descCell = cells[2];
     const ctaLink = cells[3] && cells[3].querySelector('a');
+    const nutritionCell = cells[4];
     return {
-      picture, name, descCell, ctaLink,
+      picture, name, descCell, ctaLink, nutritionCell,
     };
   }).filter((f) => f.picture || f.name);
 
@@ -79,12 +84,45 @@ export default function decorate(block) {
     if (f.descCell) {
       [...f.descCell.childNodes].forEach((n) => inner.append(n.cloneNode(true)));
     }
+    // Nutrition detail (hidden until the CTA is clicked).
+    const hasNutrition = f.nutritionCell && f.nutritionCell.textContent.trim();
+
+    // "Nutrition Facts" CTA — visible in the description state.
+    const factsWrap = document.createElement('p');
+    factsWrap.className = 'button-container hero-tabs-facts-cta';
     if (f.ctaLink) {
-      f.ctaLink.classList.add('button');
-      const wrap = document.createElement('p');
-      wrap.className = 'button-container';
-      wrap.append(f.ctaLink);
-      inner.append(wrap);
+      const facts = document.createElement('button');
+      facts.type = 'button';
+      facts.className = 'button';
+      facts.textContent = f.ctaLink.textContent || 'Nutrition Facts';
+      factsWrap.append(facts);
+      inner.append(factsWrap);
+
+      if (hasNutrition) {
+        const nutrition = document.createElement('div');
+        nutrition.className = 'hero-tabs-nutrition';
+        nutrition.hidden = true;
+        [...f.nutritionCell.childNodes].forEach((n) => nutrition.append(n.cloneNode(true)));
+
+        // "Description" CTA — sits at the bottom of the nutrition state and
+        // toggles back, mirroring the source's paired btn-products buttons.
+        const backWrap = document.createElement('p');
+        backWrap.className = 'button-container hero-tabs-desc-cta';
+        const back = document.createElement('button');
+        back.type = 'button';
+        back.className = 'button';
+        back.textContent = 'Description';
+        backWrap.append(back);
+        nutrition.append(backWrap);
+        inner.append(nutrition);
+
+        const show = (showNutrition) => {
+          nutrition.hidden = !showNutrition;
+          factsWrap.hidden = showNutrition;
+        };
+        facts.addEventListener('click', () => show(true));
+        back.addEventListener('click', () => show(false));
+      }
     }
     panel.append(inner);
     panels.push(panel);

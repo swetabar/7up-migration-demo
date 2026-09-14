@@ -6,7 +6,11 @@
  * The source #products section is a can-carousel of ALL flavours where each can
  * acts as a tab. We reproduce that: one block row per flavour, in carousel order,
  * with the cells the block's decorate() expects:
- *   | can image | Flavour Name | description | CTA link |
+ *   | can image | Flavour Name | description | CTA link | nutrition facts |
+ *
+ * The nutrition cell mirrors the source's hidden nutrition-container (Calories,
+ * Serving Size, the facts table, Ingredients and legal). Block cells cannot hold
+ * a nested <table>, so the facts table is flattened into a <ul>.
  *
  * The element passed in is the #products (or #product-carousel) container on the
  * shared products page.
@@ -52,7 +56,30 @@ export default function parse(element, { document }) {
       ctaCell.append(cta);
     }
 
-    cells.push([img || document.createElement('span'), nameCell, descCell, ctaCell]);
+    // Nutrition facts cell — mirror the source nutrition-container, flattening
+    // the facts <table> into a <ul> so it survives markdown conversion.
+    const nutriCell = document.createElement('div');
+    const nutrition = panel ? panel.querySelector('.nutrition-container, .nutrition') : null;
+    if (nutrition) {
+      const clone = nutrition.cloneNode(true);
+      clone.querySelectorAll('button, .btn-products, .customer-reviews, .smart-commerce, .reviews-btn')
+        .forEach((n) => n.remove());
+      clone.querySelectorAll('table').forEach((table) => {
+        const ul = document.createElement('ul');
+        table.querySelectorAll('tr').forEach((tr) => {
+          const parts = [...tr.children].map((c) => c.textContent.replace(/\s+/g, ' ').trim());
+          const text = parts.filter(Boolean).join(' — ');
+          if (!text) return;
+          const liEl = document.createElement('li');
+          liEl.textContent = text;
+          ul.append(liEl);
+        });
+        table.replaceWith(ul);
+      });
+      while (clone.firstChild) nutriCell.append(clone.firstChild);
+    }
+
+    cells.push([img || document.createElement('span'), nameCell, descCell, ctaCell, nutriCell]);
   });
 
   const block = WebImporter.Blocks.createBlock(document, { name: 'hero-tabs', cells });

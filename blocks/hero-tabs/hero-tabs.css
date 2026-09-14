@@ -175,7 +175,12 @@
   margin: 40px 0 0;
 }
 
-.hero-tabs .hero-tabs-panel a.button {
+.hero-tabs .hero-tabs-panel .button-container[hidden] {
+  display: none;
+}
+
+.hero-tabs .hero-tabs-panel a.button,
+.hero-tabs .hero-tabs-panel button.button {
   display: inline-block;
   margin: 0;
   padding: 10px 30px;
@@ -187,13 +192,72 @@
   font-weight: 700;
   text-transform: uppercase;
   text-decoration: none;
+  cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
 }
 
 .hero-tabs .hero-tabs-panel a.button:hover,
-.hero-tabs .hero-tabs-panel a.button:focus-visible {
+.hero-tabs .hero-tabs-panel a.button:focus-visible,
+.hero-tabs .hero-tabs-panel button.button:hover,
+.hero-tabs .hero-tabs-panel button.button:focus-visible {
   background: #fff;
   color: #01ab14;
+}
+
+/* ---- nutrition detail (revealed by the Nutrition Facts toggle) ---- */
+.hero-tabs .hero-tabs-nutrition {
+  margin-top: 30px;
+  font-size: 17px;
+  color: #fff;
+}
+
+.hero-tabs .hero-tabs-nutrition[hidden] {
+  display: none;
+}
+
+.hero-tabs .hero-tabs-nutrition h4 {
+  margin: 0;
+  font-family: Nobel, Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.hero-tabs .hero-tabs-nutrition .big {
+  font-size: 34px;
+  line-height: 1.1;
+}
+
+.hero-tabs .hero-tabs-nutrition ul {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.hero-tabs .hero-tabs-nutrition li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 3px 0;
+  border-bottom: 1px solid rgb(255 255 255 / 30%);
+}
+
+.hero-tabs .hero-tabs-nutrition li:first-child {
+  font-weight: 700;
+}
+
+.hero-tabs .hero-tabs-nutrition .ingredients {
+  margin-top: 34px;
+}
+
+.hero-tabs .hero-tabs-nutrition .ingredients p {
+  font-size: 15px;
+}
+
+.hero-tabs .hero-tabs-nutrition .legal {
+  margin-top: 40px;
+  font-size: 13px;
 }
 
 /* ---- desktop: two 50/50 columns, exact source geometry ---- */
