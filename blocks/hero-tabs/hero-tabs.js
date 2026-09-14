@@ -25,8 +25,10 @@ export default function decorate(block) {
     const descCell = cells[2];
     const ctaLink = cells[3] && cells[3].querySelector('a');
     const nutritionCell = cells[4];
+    // Product path for this flavour, e.g. /en/products/7up-cherry.
+    const productPath = ctaLink ? ctaLink.getAttribute('href') : '';
     return {
-      picture, name, descCell, ctaLink, nutritionCell,
+      picture, name, descCell, ctaLink, nutritionCell, productPath,
     };
   }).filter((f) => f.picture || f.name);
 
@@ -49,7 +51,7 @@ export default function decorate(block) {
   // exact rotation from the source: for each can, its class is item-(offset+1)
   // where offset is its distance ahead of the selected index (wrapping around).
   let selected = 0;
-  const select = (index) => {
+  const select = (index, updateUrl = true) => {
     selected = ((index % total) + total) % total;
     cans.forEach((li, i) => {
       let offset = i - selected;
@@ -57,6 +59,13 @@ export default function decorate(block) {
       li.className = `item-${offset + 1}`;
     });
     panels.forEach((p, i) => p.classList.toggle('active', i === selected));
+
+    // Reflect the selected flavour in the URL (e.g. /en/products/7up-cherry),
+    // matching the source's pushState — without navigating/reloading.
+    const path = flavours[selected] && flavours[selected].productPath;
+    if (updateUrl && path) {
+      window.history.pushState({ heroTab: selected }, '', path);
+    }
   };
 
   flavours.forEach((f, i) => {
@@ -148,6 +157,22 @@ export default function decorate(block) {
   block.textContent = '';
   block.append(carouselContainer, ...panels);
 
-  // Initial state.
-  select(0);
+  // Initial state: honour a flavour slug in the current URL (e.g. deep link to
+  // /en/products/7up-cherry), otherwise default to the first flavour. Don't push
+  // a new history entry on load.
+  const matchIndex = () => {
+    const { pathname } = window.location;
+    const found = flavours.findIndex((f) => f.productPath && (
+      pathname === f.productPath || pathname === `${f.productPath}.html`
+    ));
+    return found;
+  };
+  const initial = matchIndex();
+  select(initial >= 0 ? initial : 0, false);
+
+  // Keep the carousel in sync with browser back/forward.
+  window.addEventListener('popstate', () => {
+    const idx = matchIndex();
+    if (idx >= 0) select(idx, false);
+  });
 }
