@@ -1,0 +1,11 @@
+{
+  "status": "success",
+  "url": "https://www.7up.com/en/products/7up",
+  "path": "en/products/7up",
+  "timestamp": "2026-09-14T13:19:30.706Z",
+  "title": "Original 7UP | 7up.com",
+  "template": "products-7up",
+  "blocks": [
+    "hero-tabs"
+  ]
+}

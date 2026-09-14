@@ -1,0 +1,10 @@
+{
+  "variantName": "hero-tabs",
+  "baseBlock": "tabs",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "Product hero: a large product image beside a content column with the product name, a tab strip that toggles between Description and Nutrition Facts panels, and a CTA button. Stacks vertically on mobile, side-by-side on desktop.",
+  "contentPattern": "Rows: an image-only row (hero media), a heading-only row (product name), one row per tab as [label, content] (e.g. Description, Nutrition Facts), and a final link-only row (CTA).",
+  "usage": "Product detail hero on 7up product pages (e.g. /en/products/7up).",
+  "options": [],
+  "memberVariantIds": ["hero-tabs"]
+}

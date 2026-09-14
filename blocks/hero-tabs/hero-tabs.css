@@ -1,0 +1,261 @@
+/*
+ * hero-tabs — product can-carousel that doubles as a tab strip.
+ *
+ * Faithful port of the 7up.com #products carousel: a row of product cans on the
+ * left (each can is a tab), and a content panel on the right that swaps its
+ * name/description/CTA when a can is selected. Geometry, paddings and the arc
+ * transforms are lifted verbatim from the source computed styles so positions
+ * and dimensions match 1:1 at desktop widths.
+ */
+
+/* full-bleed: let the green background reach the viewport edges */
+.hero-tabs-container .hero-tabs-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.hero-tabs {
+  position: relative;
+  background: #01ab14;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* clearfix — the carousel column floats left, the active panel floats right */
+.hero-tabs::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* ---- left column: the can carousel (tabs) ---- */
+.hero-tabs .hero-tabs-carousel-container {
+  width: 100%;
+}
+
+.hero-tabs ul.hero-tabs-carousel {
+  position: relative;
+  height: 340px;
+  margin: 40px 0 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.hero-tabs ul.hero-tabs-carousel li {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  z-index: 2;
+  width: 100px;
+  height: 100%;
+  margin: 0 0 0 -50px;
+  padding: 0;
+  opacity: 1;
+  transition: transform 1.3s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.2s linear;
+}
+
+.hero-tabs ul.hero-tabs-carousel li button {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: url('./bottle-shadow.png') 50% 100% / 100% no-repeat;
+  cursor: pointer;
+}
+
+.hero-tabs ul.hero-tabs-carousel li button img,
+.hero-tabs ul.hero-tabs-carousel li button picture {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 90%;
+}
+
+/* arc positions — clicked can becomes item-1 (centre), the rest fan out */
+.hero-tabs ul.hero-tabs-carousel li.item-1 {
+  z-index: 2;
+  transform: scale(1) translate3d(0, 0, 0);
+}
+
+.hero-tabs ul.hero-tabs-carousel li.item-2 {
+  z-index: 1;
+  transform: scale(0.8) translate3d(150%, -4%, 0);
+}
+
+.hero-tabs ul.hero-tabs-carousel li.item-3 {
+  z-index: 0;
+  opacity: 0.5;
+  transform: scale(0.65) translate3d(50%, -8%, 0);
+}
+
+.hero-tabs ul.hero-tabs-carousel li.item-3 button img {
+  filter: blur(5px);
+}
+
+.hero-tabs ul.hero-tabs-carousel li.item-4,
+.hero-tabs ul.hero-tabs-carousel li.item-5 {
+  z-index: 1;
+  transform: scale(0.8) translate3d(-150%, -4%, 0);
+}
+
+/* 6th can sits centred behind item-1 (occluded), as on the source */
+.hero-tabs ul.hero-tabs-carousel li.item-6 {
+  z-index: 0;
+  transform: scale(1) translate3d(0, 0, 0);
+}
+
+/* prev / next arrows */
+.hero-tabs .hero-tabs-nav {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.hero-tabs .hero-tabs-nav button {
+  display: inline-block;
+  width: 125px;
+  height: 88px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  text-indent: -9999px;
+  cursor: pointer;
+  background: url('./arrows-products.png') 0 50% / 247px 88px no-repeat;
+}
+
+.hero-tabs .hero-tabs-nav button.next {
+  background-position: 100% 50%;
+}
+
+/* ---- right column: the product panels ---- */
+.hero-tabs .hero-tabs-panel {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 30px 0 60px;
+  font-size: 17px;
+  background: #01ab14;
+}
+
+.hero-tabs .hero-tabs-panel.active {
+  position: relative;
+  left: 0;
+  z-index: 6;
+}
+
+.hero-tabs .hero-tabs-panel .hero-tabs-panel-inner {
+  margin: 0;
+}
+
+.hero-tabs .hero-tabs-panel h2 {
+  margin: 0 0 10px;
+  font-family: Nobel, Helvetica, Arial, sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.hero-tabs .hero-tabs-panel p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.4;
+  color: #fff;
+}
+
+.hero-tabs .hero-tabs-panel .button-container {
+  margin: 40px 0 0;
+}
+
+.hero-tabs .hero-tabs-panel a.button {
+  display: inline-block;
+  margin: 0;
+  padding: 10px 30px;
+  border: 1px solid #fff;
+  border-radius: 16px;
+  background: transparent;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.hero-tabs .hero-tabs-panel a.button:hover,
+.hero-tabs .hero-tabs-panel a.button:focus-visible {
+  background: #fff;
+  color: #01ab14;
+}
+
+/* ---- desktop: two 50/50 columns, exact source geometry ---- */
+@media (width >= 768px) {
+  .hero-tabs .hero-tabs-carousel-container {
+    width: 50%;
+    float: left;
+    box-sizing: border-box;
+  }
+
+  .hero-tabs ul.hero-tabs-carousel {
+    height: 490px;
+    margin: 77px 0 20px;
+  }
+
+  .hero-tabs ul.hero-tabs-carousel li {
+    width: 146px;
+    margin-left: -73px;
+  }
+
+  .hero-tabs .hero-tabs-nav {
+    margin-bottom: 40px;
+  }
+
+  .hero-tabs .hero-tabs-panel {
+    width: 50%;
+    padding: 70px 0 60px 60px;
+    box-sizing: border-box;
+  }
+
+  .hero-tabs .hero-tabs-panel.active {
+    float: right;
+  }
+
+  .hero-tabs .hero-tabs-panel .hero-tabs-panel-inner {
+    width: 425px;
+    padding: 55px 15px 0 0;
+  }
+}
+
+@media (width >= 992px) {
+  .hero-tabs ul.hero-tabs-carousel {
+    height: 591px;
+    margin: 32px 0 -30px;
+  }
+
+  .hero-tabs ul.hero-tabs-carousel li {
+    width: 186px;
+    margin-left: -92px;
+  }
+
+  .hero-tabs ul.hero-tabs-carousel li button img,
+  .hero-tabs ul.hero-tabs-carousel li button picture {
+    margin-top: 80%;
+  }
+
+  .hero-tabs .hero-tabs-panel {
+    padding: 100px 0 90px 82px;
+    min-height: 958px;
+  }
+
+  .hero-tabs .hero-tabs-panel.active {
+    padding-top: 120px;
+  }
+
+  .hero-tabs .hero-tabs-panel .hero-tabs-panel-inner {
+    width: 503px;
+  }
+}
