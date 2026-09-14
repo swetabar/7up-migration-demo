@@ -17,8 +17,23 @@
 export default function decorate(block) {
   const rows = [...block.children];
 
-  // Parse each row into a flavour record.
-  const flavours = rows.map((row) => {
+  // The first row is the intro (default right-hand content) when its second
+  // cell carries an <h1>. Cell 0 is the decorative image, cell 1 the text.
+  // It has no can, so it isn't part of the carousel.
+  let introCell = null;
+  let introImage = null;
+  const flavourRows = rows.filter((row) => {
+    const cells = [...row.children];
+    if (!introCell && cells[1] && cells[1].querySelector('h1')) {
+      [, introCell] = cells;
+      introImage = cells[0] && cells[0].querySelector('picture, img');
+      return false;
+    }
+    return true;
+  });
+
+  // Parse each flavour row into a record.
+  const flavours = flavourRows.map((row) => {
     const cells = [...row.children];
     const picture = cells[0] && cells[0].querySelector('picture, img');
     const name = cells[1] ? cells[1].textContent.trim() : '';
@@ -47,24 +62,49 @@ export default function decorate(block) {
   const cans = [];
   const panels = [];
 
+  // The intro panel — shown by default on the products landing page. Sentinel
+  // index INTRO (-1) selects it (no flavour active). Built from the intro cell.
+  const INTRO = -1;
+  let introPanel = null;
+  if (introCell) {
+    introPanel = document.createElement('div');
+    introPanel.className = 'hero-tabs-panel hero-tabs-intro';
+    const introInner = document.createElement('div');
+    introInner.className = 'hero-tabs-panel-inner';
+    [...introCell.childNodes].forEach((n) => introInner.append(n.cloneNode(true)));
+    if (introImage) introInner.append(introImage.closest('picture') || introImage);
+    introPanel.append(introInner);
+  }
+
+  // Base products path (parent of the flavour paths), used when returning to the
+  // intro state, e.g. /en/products.
+  const firstPath = flavours.find((f) => f.productPath)?.productPath || '';
+  const basePath = firstPath.replace(/\/[^/]+$/, '') || firstPath;
+
   // Relabel cans around the arc and activate the matching panel — this is the
   // exact rotation from the source: for each can, its class is item-(offset+1)
   // where offset is its distance ahead of the selected index (wrapping around).
-  let selected = 0;
+  // index === INTRO shows the intro panel with no flavour active.
+  let selected = INTRO;
   const select = (index, updateUrl = true) => {
-    selected = ((index % total) + total) % total;
+    const isIntro = index === INTRO;
+    selected = isIntro ? INTRO : ((index % total) + total) % total;
+    // When on the intro, keep a sensible default arc centred on the first can.
+    const centre = isIntro ? 0 : selected;
     cans.forEach((li, i) => {
-      let offset = i - selected;
+      let offset = i - centre;
       if (offset < 0) offset += total;
       li.className = `item-${offset + 1}`;
     });
-    panels.forEach((p, i) => p.classList.toggle('active', i === selected));
+    if (introPanel) introPanel.classList.toggle('active', isIntro);
+    panels.forEach((p, i) => p.classList.toggle('active', !isIntro && i === selected));
+    block.classList.toggle('open-product', !isIntro);
 
-    // Reflect the selected flavour in the URL (e.g. /en/products/7up-cherry),
-    // matching the source's pushState — without navigating/reloading.
-    const path = flavours[selected] && flavours[selected].productPath;
+    // Reflect the selection in the URL (e.g. /en/products/7up-cherry or the
+    // /en/products landing), matching the source's pushState — no reload.
+    const path = isIntro ? basePath : (flavours[selected] && flavours[selected].productPath);
     if (updateUrl && path) {
-      window.history.pushState({ heroTab: selected }, '', path);
+      window.history.pushState({ heroTab: index }, '', path);
     }
   };
 
@@ -155,24 +195,28 @@ export default function decorate(block) {
   carouselContainer.append(carousel, nav);
 
   block.textContent = '';
-  block.append(carouselContainer, ...panels);
+  const rightPanels = introPanel ? [introPanel, ...panels] : panels;
+  block.append(carouselContainer, ...rightPanels);
 
-  // Initial state: honour a flavour slug in the current URL (e.g. deep link to
-  // /en/products/7up-cherry), otherwise default to the first flavour. Don't push
-  // a new history entry on load.
+  // Initial state: honour a flavour slug in the current URL (deep link to
+  // /en/products/7up-cherry) → that flavour; otherwise show the intro (default
+  // /en/products landing) if present, else the first flavour. No history push.
   const matchIndex = () => {
     const { pathname } = window.location;
+    const clean = pathname.replace(/\.html$/, '').replace(/\.plain$/, '');
     const found = flavours.findIndex((f) => f.productPath && (
-      pathname === f.productPath || pathname === `${f.productPath}.html`
+      clean === f.productPath || pathname === f.productPath || pathname === `${f.productPath}.html`
     ));
     return found;
   };
   const initial = matchIndex();
-  select(initial >= 0 ? initial : 0, false);
+  if (initial >= 0) select(initial, false);
+  else select(introPanel ? INTRO : 0, false);
 
   // Keep the carousel in sync with browser back/forward.
   window.addEventListener('popstate', () => {
     const idx = matchIndex();
     if (idx >= 0) select(idx, false);
+    else if (introPanel) select(INTRO, false);
   });
 }

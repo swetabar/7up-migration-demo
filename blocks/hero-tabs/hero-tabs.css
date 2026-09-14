@@ -171,6 +171,31 @@
   color: #fff;
 }
 
+/* intro panel (the default /en/products right-hand content) */
+.hero-tabs .hero-tabs-intro h1 {
+  margin: 0 0 22px;
+  font-family: Nobel, Helvetica, Arial, sans-serif;
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.hero-tabs .hero-tabs-intro p {
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.hero-tabs .hero-tabs-intro img {
+  display: block;
+  margin: 40px auto 0 0;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
 .hero-tabs .hero-tabs-panel .button-container {
   margin: 40px 0 0;
 }
@@ -296,6 +321,10 @@
     width: 425px;
     padding: 55px 15px 0 0;
   }
+
+  .hero-tabs .hero-tabs-intro h1 {
+    font-size: 84px;
+  }
 }
 
 @media (width >= 992px) {
@@ -321,6 +350,12 @@
 
   .hero-tabs .hero-tabs-panel.active {
     padding-top: 120px;
+  }
+
+  /* The intro panel sizes to its content (no tall product min-height), so the
+     footer sits directly beneath the image instead of after empty green. */
+  .hero-tabs .hero-tabs-intro {
+    min-height: 0;
   }
 
   .hero-tabs .hero-tabs-panel .hero-tabs-panel-inner {

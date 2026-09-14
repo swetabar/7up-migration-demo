@@ -2,67 +2,39 @@
 /* global WebImporter */
 
 // PARSER IMPORTS
-import carouselProductParser from './parsers/carousel-product.js';
-import cardsNutritionParser from './parsers/cards-nutrition.js';
+import heroTabsParser from './parsers/hero-tabs.js';
 
 // TRANSFORMER IMPORTS
 import cleanupTransformer from './transformers/7up-cleanup.js';
-import sectionsTransformer from './transformers/7up-sections.js';
 
-// PAGE TEMPLATE CONFIGURATION - Embedded from page-templates.json
+// PAGE TEMPLATE CONFIGURATION
+// The 7UP products landing page. The source #products section is a can-carousel
+// (each can is a tab) plus a right-hand column that shows an intro by default and
+// swaps to a product panel when a can is selected. We render the whole thing as a
+// single hero-tabs block (intro row + one row per flavour).
 const PAGE_TEMPLATE = {
   name: 'products',
-  description: '7up products explorer: intro copy, a can carousel selector, and per-flavour nutrition detail cards.',
+  description: '7UP products landing — hero-tabs can-carousel with intro + per-flavour panels.',
   urls: [
     'https://www.7up.com/en/products',
   ],
   blocks: [
     {
-      name: 'carousel-product',
-      instances: [
-        '#products #product-carousel',
-      ],
-    },
-    {
-      name: 'cards-nutrition',
-      instances: [
-        '#products .product',
-      ],
+      name: 'hero-tabs',
+      instances: ['#product-carousel'],
     },
   ],
-  sections: [
-    {
-      id: 'rc4',
-      name: 'product-explorer',
-      selector: ['#products'],
-      style: 'green',
-      blocks: ['carousel-product', 'cards-nutrition'],
-      defaultContent: [
-        '#products > header.container h1',
-        '#products > header.container p',
-      ],
-    },
-  ],
+  sections: [],
 };
 
 // PARSER REGISTRY
 const parsers = {
-  'carousel-product': carouselProductParser,
-  'cards-nutrition': cardsNutritionParser,
+  'hero-tabs': heroTabsParser,
 };
 
-// TRANSFORMER REGISTRY - cleanup first, then sections. Run the sections
-// transformer when there are 2+ sections OR any section carries a style.
-const needsSections = (PAGE_TEMPLATE.sections || []).length > 1
-  || (PAGE_TEMPLATE.sections || []).some((s) => s.style);
-const transformers = [
-  cleanupTransformer,
-  ...(needsSections ? [sectionsTransformer] : []),
-];
+// Only run cleanup (strip site chrome). No section transformer — single block.
+const transformers = [cleanupTransformer];
 
-/**
- * Execute all page transformers for a specific hook
- */
 function executeTransformers(hookName, element, payload) {
   const enhancedPayload = { ...payload, template: PAGE_TEMPLATE };
   transformers.forEach((transformerFn) => {
@@ -74,9 +46,6 @@ function executeTransformers(hookName, element, payload) {
   });
 }
 
-/**
- * Find all blocks on the page based on the embedded template configuration
- */
 function findBlocksOnPage(document, template) {
   const pageBlocks = [];
   template.blocks.forEach((blockDef) => {
@@ -86,12 +55,7 @@ function findBlocksOnPage(document, template) {
         console.warn(`Block "${blockDef.name}" selector not found: ${selector}`);
       }
       elements.forEach((element) => {
-        pageBlocks.push({
-          name: blockDef.name,
-          selector,
-          element,
-          section: blockDef.section || null,
-        });
+        pageBlocks.push({ name: blockDef.name, selector, element });
       });
     });
   });
@@ -99,7 +63,6 @@ function findBlocksOnPage(document, template) {
   return pageBlocks;
 }
 
-// EXPORT DEFAULT CONFIGURATION
 export default {
   transform: (payload) => {
     const {
@@ -108,13 +71,9 @@ export default {
 
     const main = document.body;
 
-    // 1. beforeTransform (initial cleanup + section breaks)
-    executeTransformers('beforeTransform', main, payload);
-
-    // 2. Find blocks on page
+    // 1. Parse the hero-tabs block BEFORE cleanup — the parser reaches into the
+    //    carousel and the section header, which cleanup would otherwise strip.
     const pageBlocks = findBlocksOnPage(document, PAGE_TEMPLATE);
-
-    // 3. Parse each block (skip elements already replaced by a prior parser)
     pageBlocks.forEach((block) => {
       if (!block.element.parentNode) return;
       const parser = parsers[block.name];
@@ -124,26 +83,34 @@ export default {
         } catch (e) {
           console.error(`Failed to parse ${block.name} (${block.selector}):`, e);
         }
-      } else {
-        console.warn(`No parser found for block: ${block.name}`);
       }
     });
 
-    // 4. afterTransform (final cleanup + section metadata)
+    // 2. The parser emits a block TABLE tagged data-hero-tabs in place inside
+    //    #products. Detach it to main FIRST so cleanup can't remove it.
+    const heroTabs = document.querySelector('[data-hero-tabs]');
+    if (heroTabs) main.prepend(heroTabs);
+
+    // 3. Strip everything else (banners, carousel, other chrome).
+    executeTransformers('beforeTransform', main, payload);
     executeTransformers('afterTransform', main, payload);
 
-    // 5. WebImporter built-in rules
+    // 4. Rebuild main to contain ONLY the hero-tabs block.
+    if (heroTabs) {
+      heroTabs.removeAttribute('data-hero-tabs');
+      main.textContent = '';
+      main.append(heroTabs);
+    }
+
+    // 5. WebImporter built-in rules.
     const hr = document.createElement('hr');
     main.appendChild(hr);
     WebImporter.rules.createMetadata(main, document);
     WebImporter.rules.transformBackgroundImages(main, document);
     WebImporter.rules.adjustImageUrls(main, url, params.originalURL);
 
-    // 6. Generate sanitized path (map root to /index)
-    const rawPath = new URL(params.originalURL).pathname
-      .replace(/\/$/, '')
-      .replace(/\.html?$/, '');
-    const path = WebImporter.FileUtils.sanitizePath(rawPath === '' ? '/index' : rawPath);
+    // 6. Output path: /en/products.
+    const path = '/en/products';
 
     return [{
       element: main,

@@ -41,94 +41,84 @@ var CustomImportScript = (() => {
     default: () => import_products_default
   });
 
-  // tools/importer/parsers/carousel-product.js
-  function parse(element, { document: document2 }) {
-    const list = element.matches('ul#product-carousel, ul[id*="carousel"]') ? element : element.querySelector('ul#product-carousel, ul[id*="carousel"]');
-    const scope = list || element;
-    const items = Array.from(scope.querySelectorAll(":scope > li, li"));
+  // tools/importer/parsers/hero-tabs.js
+  function parse(element, { document }) {
+    const root = element.closest("#products") || document.querySelector("#products") || element;
+    const carousel = root.querySelector("#product-carousel");
     const cells = [];
-    items.forEach((item) => {
-      const anchor = item.querySelector("a");
-      const img = item.querySelector("img");
-      if (!img && !anchor) return;
-      const imageCell = anchor || img;
-      cells.push([imageCell, ""]);
-    });
-    if (cells.length === 0) {
-      element.replaceWith(...element.childNodes);
-      return;
+    const header = root.querySelector(":scope > header, header.container");
+    if (header) {
+      const introImg = header.querySelector("img");
+      const introContent = document.createElement("div");
+      const h1 = header.querySelector("h1");
+      if (h1) {
+        const heading = document.createElement("h1");
+        const clone = h1.cloneNode(true);
+        clone.querySelectorAll("br").forEach((br) => br.replaceWith(document.createTextNode(" ")));
+        heading.textContent = clone.textContent.replace(/\s+/g, " ").trim();
+        introContent.append(heading);
+      }
+      const introP = header.querySelector("p");
+      if (introP) {
+        const p = document.createElement("p");
+        p.textContent = introP.textContent.replace(/\s+/g, " ").trim();
+        introContent.append(p);
+      }
+      cells.push([introImg || document.createElement("span"), introContent]);
     }
-    const block = WebImporter.Blocks.createBlock(document2, { name: "carousel-product", cells });
-    element.replaceWith(block);
-  }
-
-  // tools/importer/parsers/cards-nutrition.js
-  function parse2(element, { document: document2 }) {
-    const panels = element.matches(".product") ? [element] : Array.from(element.querySelectorAll(":scope .product, div.product"));
-    const scope = panels.length ? panels : [element];
-    const cells = [];
-    scope.forEach((panel) => {
-      const contentCell = [];
-      const titleEl = panel.querySelector(".product-header-text h3, .product-header h3, h3");
-      if (titleEl && titleEl.textContent.trim()) {
-        const heading = document2.createElement("h2");
-        heading.textContent = titleEl.textContent.replace(/\s+/g, " ").trim();
-        contentCell.push(heading);
+    const cans = carousel ? [...carousel.querySelectorAll(":scope > li")] : [];
+    cans.forEach((li) => {
+      const a = li.querySelector("a");
+      const href = a ? a.getAttribute("href") || "" : "";
+      const slug = href.replace(/^#product-/, "");
+      const img = li.querySelector("img");
+      const panel = slug ? root.querySelector(`#product-${slug}`) : null;
+      let name = img ? (img.getAttribute("alt") || "").trim() : "";
+      let descText = "";
+      if (panel) {
+        const h3 = panel.querySelector(".product-header-text h3, .product-header h3, h3");
+        if (h3) name = h3.textContent.replace(/\s+/g, " ").trim();
+        const p = panel.querySelector(":scope > .container > p, :scope .container > p, :scope > p");
+        if (p) descText = p.textContent.replace(/\s+/g, " ").trim();
       }
-      const container = panel.querySelector(":scope > .container") || panel;
-      const descEl = Array.from(container.children).find(
-        (child) => child.tagName === "P" && child.textContent.trim()
-      );
-      if (descEl) {
-        const p = document2.createElement("p");
-        p.textContent = descEl.textContent.replace(/\s+/g, " ").trim();
-        contentCell.push(p);
+      const nameCell = document.createElement("p");
+      nameCell.textContent = name;
+      const descCell = document.createElement("div");
+      if (descText) {
+        const p = document.createElement("p");
+        p.textContent = descText;
+        descCell.append(p);
       }
-      const callout = panel.querySelector(".nutrition .pull-left, .pull-left");
-      if (callout) {
-        Array.from(callout.children).forEach((node) => {
-          if (node.tagName === "H4" && node.textContent.trim()) {
-            const h = document2.createElement("h4");
-            h.textContent = node.textContent.replace(/\s+/g, " ").trim();
-            contentCell.push(h);
-          } else if (node.tagName === "P" && node.textContent.trim()) {
-            const p = document2.createElement("p");
-            p.textContent = node.textContent.replace(/\s+/g, " ").trim();
-            contentCell.push(p);
-          }
+      const ctaCell = document.createElement("div");
+      if (slug) {
+        const cta = document.createElement("a");
+        cta.setAttribute("href", `/en/products/${slug}`);
+        cta.textContent = "Nutrition Facts";
+        ctaCell.append(cta);
+      }
+      const nutriCell = document.createElement("div");
+      const nutrition = panel ? panel.querySelector(".nutrition-container, .nutrition") : null;
+      if (nutrition) {
+        const clone = nutrition.cloneNode(true);
+        clone.querySelectorAll("button, .btn-products, .customer-reviews, .smart-commerce, .reviews-btn").forEach((n) => n.remove());
+        clone.querySelectorAll("table").forEach((table) => {
+          const ul = document.createElement("ul");
+          table.querySelectorAll("tr").forEach((tr) => {
+            const parts = [...tr.children].map((c) => c.textContent.replace(/\s+/g, " ").trim());
+            const text = parts.filter(Boolean).join(" \u2014 ");
+            if (!text) return;
+            const liEl = document.createElement("li");
+            liEl.textContent = text;
+            ul.append(liEl);
+          });
+          table.replaceWith(ul);
         });
+        while (clone.firstChild) nutriCell.append(clone.firstChild);
       }
-      const table = panel.querySelector(".nutrition table, table");
-      if (table) contentCell.push(table);
-      const ingredients = panel.querySelector(".ingredients");
-      if (ingredients) {
-        const ingHeading = ingredients.querySelector("h4");
-        if (ingHeading && ingHeading.textContent.trim()) {
-          const h = document2.createElement("h4");
-          h.textContent = ingHeading.textContent.replace(/\s+/g, " ").trim();
-          contentCell.push(h);
-        }
-        const ingBody = ingredients.querySelector("p");
-        if (ingBody && ingBody.textContent.trim()) {
-          const p = document2.createElement("p");
-          p.textContent = ingBody.textContent.replace(/\s+/g, " ").trim();
-          contentCell.push(p);
-        }
-      }
-      const legal = panel.querySelector(".legal");
-      if (legal && legal.textContent.trim()) {
-        const p = document2.createElement("p");
-        p.textContent = legal.textContent.replace(/\s+/g, " ").trim();
-        contentCell.push(p);
-      }
-      if (contentCell.length === 0) return;
-      cells.push([contentCell]);
+      cells.push([img || document.createElement("span"), nameCell, descCell, ctaCell, nutriCell]);
     });
-    if (cells.length === 0) {
-      element.replaceWith(...element.childNodes);
-      return;
-    }
-    const block = WebImporter.Blocks.createBlock(document2, { name: "cards-nutrition", cells });
+    const block = WebImporter.Blocks.createBlock(document, { name: "hero-tabs", cells });
+    block.setAttribute("data-hero-tabs", "true");
     element.replaceWith(block);
   }
 
@@ -202,92 +192,25 @@ var CustomImportScript = (() => {
     }
   }
 
-  // tools/importer/transformers/7up-sections.js
-  var SECTION_MARKER_ATTR = "data-excat-section-id";
-  function querySection(root, selectors) {
-    for (const sel of selectors) {
-      const el = root.querySelector(sel);
-      if (el) return el;
-    }
-    return null;
-  }
-  function transform2(hookName, element, payload) {
-    const sections = payload.template.sections || [];
-    if (hookName === "beforeTransform") {
-      for (let i = sections.length - 1; i >= 0; i -= 1) {
-        const section = sections[i];
-        if (i === 0 && !section.style) continue;
-        const sectionEl = querySection(element, section.selector);
-        if (!sectionEl) continue;
-        const hr = document.createElement("hr");
-        if (section.style) hr.setAttribute(SECTION_MARKER_ATTR, section.id);
-        sectionEl.before(hr);
-      }
-    }
-    if (hookName === "afterTransform") {
-      for (let i = sections.length - 1; i >= 0; i -= 1) {
-        const section = sections[i];
-        if (!section.style) continue;
-        const marker = element.querySelector(`[${SECTION_MARKER_ATTR}="${section.id}"]`);
-        const anchor = marker || querySection(element, section.selector);
-        if (!anchor) continue;
-        const metadataBlock = WebImporter.Blocks.createBlock(document, {
-          name: "Section Metadata",
-          cells: { style: section.style }
-        });
-        anchor.after(metadataBlock);
-        if (marker) {
-          marker.removeAttribute(SECTION_MARKER_ATTR);
-          if (i === 0) marker.remove();
-        }
-      }
-    }
-  }
-
   // tools/importer/import-products.js
   var PAGE_TEMPLATE = {
     name: "products",
-    description: "7up products explorer: intro copy, a can carousel selector, and per-flavour nutrition detail cards.",
+    description: "7UP products landing \u2014 hero-tabs can-carousel with intro + per-flavour panels.",
     urls: [
       "https://www.7up.com/en/products"
     ],
     blocks: [
       {
-        name: "carousel-product",
-        instances: [
-          "#products #product-carousel"
-        ]
-      },
-      {
-        name: "cards-nutrition",
-        instances: [
-          "#products .product"
-        ]
+        name: "hero-tabs",
+        instances: ["#product-carousel"]
       }
     ],
-    sections: [
-      {
-        id: "rc4",
-        name: "product-explorer",
-        selector: ["#products"],
-        style: "green",
-        blocks: ["carousel-product", "cards-nutrition"],
-        defaultContent: [
-          "#products > header.container h1",
-          "#products > header.container p"
-        ]
-      }
-    ]
+    sections: []
   };
   var parsers = {
-    "carousel-product": parse,
-    "cards-nutrition": parse2
+    "hero-tabs": parse
   };
-  var needsSections = (PAGE_TEMPLATE.sections || []).length > 1 || (PAGE_TEMPLATE.sections || []).some((s) => s.style);
-  var transformers = [
-    transform,
-    ...needsSections ? [transform2] : []
-  ];
+  var transformers = [transform];
   function executeTransformers(hookName, element, payload) {
     const enhancedPayload = __spreadProps(__spreadValues({}, payload), { template: PAGE_TEMPLATE });
     transformers.forEach((transformerFn) => {
@@ -298,21 +221,16 @@ var CustomImportScript = (() => {
       }
     });
   }
-  function findBlocksOnPage(document2, template) {
+  function findBlocksOnPage(document, template) {
     const pageBlocks = [];
     template.blocks.forEach((blockDef) => {
       blockDef.instances.forEach((selector) => {
-        const elements = document2.querySelectorAll(selector);
+        const elements = document.querySelectorAll(selector);
         if (elements.length === 0) {
           console.warn(`Block "${blockDef.name}" selector not found: ${selector}`);
         }
         elements.forEach((element) => {
-          pageBlocks.push({
-            name: blockDef.name,
-            selector,
-            element,
-            section: blockDef.section || null
-          });
+          pageBlocks.push({ name: blockDef.name, selector, element });
         });
       });
     });
@@ -322,40 +240,44 @@ var CustomImportScript = (() => {
   var import_products_default = {
     transform: (payload) => {
       const {
-        document: document2,
+        document,
         url,
         html,
         params
       } = payload;
-      const main = document2.body;
-      executeTransformers("beforeTransform", main, payload);
-      const pageBlocks = findBlocksOnPage(document2, PAGE_TEMPLATE);
+      const main = document.body;
+      const pageBlocks = findBlocksOnPage(document, PAGE_TEMPLATE);
       pageBlocks.forEach((block) => {
         if (!block.element.parentNode) return;
         const parser = parsers[block.name];
         if (parser) {
           try {
-            parser(block.element, { document: document2, url, params });
+            parser(block.element, { document, url, params });
           } catch (e) {
             console.error(`Failed to parse ${block.name} (${block.selector}):`, e);
           }
-        } else {
-          console.warn(`No parser found for block: ${block.name}`);
         }
       });
+      const heroTabs = document.querySelector("[data-hero-tabs]");
+      if (heroTabs) main.prepend(heroTabs);
+      executeTransformers("beforeTransform", main, payload);
       executeTransformers("afterTransform", main, payload);
-      const hr = document2.createElement("hr");
+      if (heroTabs) {
+        heroTabs.removeAttribute("data-hero-tabs");
+        main.textContent = "";
+        main.append(heroTabs);
+      }
+      const hr = document.createElement("hr");
       main.appendChild(hr);
-      WebImporter.rules.createMetadata(main, document2);
-      WebImporter.rules.transformBackgroundImages(main, document2);
+      WebImporter.rules.createMetadata(main, document);
+      WebImporter.rules.transformBackgroundImages(main, document);
       WebImporter.rules.adjustImageUrls(main, url, params.originalURL);
-      const rawPath = new URL(params.originalURL).pathname.replace(/\/$/, "").replace(/\.html?$/, "");
-      const path = WebImporter.FileUtils.sanitizePath(rawPath === "" ? "/index" : rawPath);
+      const path = "/en/products";
       return [{
         element: main,
         path,
         report: {
-          title: document2.title,
+          title: document.title,
           template: PAGE_TEMPLATE.name,
           blocks: pageBlocks.map((b) => b.name)
         }

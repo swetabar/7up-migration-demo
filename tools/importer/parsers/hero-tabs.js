@@ -4,8 +4,9 @@
  * Parser for the hero-tabs variant. Base block: tabs (NOT the generic hero).
  *
  * The source #products section is a can-carousel of ALL flavours where each can
- * acts as a tab. We reproduce that: one block row per flavour, in carousel order,
- * with the cells the block's decorate() expects:
+ * acts as a tab. We reproduce that: an intro row (the default right-hand content)
+ * followed by one block row per flavour, in carousel order:
+ *   | intro image | <h1> + intro paragraph |                         (intro)
  *   | can image | Flavour Name | description | CTA link | nutrition facts |
  *
  * The nutrition cell mirrors the source's hidden nutrition-container (Calories,
@@ -19,6 +20,32 @@ export default function parse(element, { document }) {
   const root = element.closest('#products') || document.querySelector('#products') || element;
   const carousel = root.querySelector('#product-carousel');
   const cells = [];
+
+  // Intro row (the default right-hand content on /en/products): the section
+  // header's heading + intro paragraph + decorative image. Detected by decorate()
+  // via the presence of an <h1>. Cells: | image | h1 + paragraph |.
+  const header = root.querySelector(':scope > header, header.container');
+  if (header) {
+    const introImg = header.querySelector('img');
+    const introContent = document.createElement('div');
+    const h1 = header.querySelector('h1');
+    if (h1) {
+      const heading = document.createElement('h1');
+      // The source heading uses <br> between words ("Drink It / Straight / Up.");
+      // turn those into spaces so the text doesn't run together.
+      const clone = h1.cloneNode(true);
+      clone.querySelectorAll('br').forEach((br) => br.replaceWith(document.createTextNode(' ')));
+      heading.textContent = clone.textContent.replace(/\s+/g, ' ').trim();
+      introContent.append(heading);
+    }
+    const introP = header.querySelector('p');
+    if (introP) {
+      const p = document.createElement('p');
+      p.textContent = introP.textContent.replace(/\s+/g, ' ').trim();
+      introContent.append(p);
+    }
+    cells.push([introImg || document.createElement('span'), introContent]);
+  }
 
   const cans = carousel ? [...carousel.querySelectorAll(':scope > li')] : [];
   cans.forEach((li) => {
