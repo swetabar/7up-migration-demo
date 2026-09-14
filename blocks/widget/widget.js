@@ -36,7 +36,11 @@ function applyWidgetShell(widget, source, widgetName, searchParams) {
   widget.classList.remove('block');
   widget.dataset.source = source.href;
   searchParams.forEach((value, key) => {
-    widget.dataset[key] = value;
+    // Set via data-* attribute (not dataset[key]) so hyphenated param names like
+    // `locator-id` are accepted — dataset only takes camelCase property names and
+    // throws on hyphenated keys. Widgets can read either the attribute or the
+    // camelCase dataset alias the browser derives from it.
+    widget.setAttribute(`data-${key}`, value);
   });
 
   const wrapper = widget.closest('.widget-wrapper');

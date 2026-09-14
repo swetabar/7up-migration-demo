@@ -1,0 +1,8 @@
+/* store-locator widget — gives the Destini mount room to render. */
+.widget.store-locator {
+  min-height: 480px;
+}
+
+.widget.store-locator #destini-locator {
+  width: 100%;
+}

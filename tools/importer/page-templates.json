@@ -41,8 +41,7 @@
         "https://www.7up.com/en/products"
       ],
       "representativeUrl": "https://www.7up.com/en/products",
-      "description": "7up products explorer: intro copy, a can carousel selector, and per-flavour nutrition detail cards.",
-      "urlPattern": "/en/products",
+      "description": "To be named in naming step",
       "blocks": [
         {
           "name": "carousel-product",
@@ -74,7 +73,8 @@
             "#products > header.container p"
           ]
         }
-      ]
+      ],
+      "urlPattern": "/en/*"
     },
     {
       "name": "recipes",
@@ -183,6 +183,42 @@
         }
       ],
       "urlPattern": "/en/recipes/*"
+    },
+    {
+      "name": "stores",
+      "urls": [
+        "https://www.7up.com/en/stores"
+      ],
+      "representativeUrl": "https://www.7up.com/en/stores",
+      "description": "7UP store locator page \u2014 a heading, a Destini store-locator widget embed, and an operator disclaimer.",
+      "blocks": [
+        {
+          "name": "widget",
+          "instances": [
+            "#destini-locator",
+            ".destini-locator-class"
+          ]
+        }
+      ],
+      "urlPattern": "/en/*",
+      "sections": [
+        {
+          "id": "rc3",
+          "name": "stores-locator",
+          "selector": [
+            ".wrap.search-wrap",
+            "#body > div.wrap.search-wrap"
+          ],
+          "style": null,
+          "blocks": [
+            "widget"
+          ],
+          "defaultContent": [
+            "h1",
+            ".search-wrap p"
+          ]
+        }
+      ]
     }
   ]
 }
