@@ -143,7 +143,11 @@
 .hero-tabs .hero-tabs-panel.active {
   position: relative;
   left: 0;
-  z-index: 6;
+
+  /* z-index 1 keeps the active panel above the off-screen inactive ones but
+     below the fixed header (z-index 2), so the header's divider line isn't
+     painted over on the right half. */
+  z-index: 1;
 }
 
 .hero-tabs .hero-tabs-panel .hero-tabs-panel-inner {
